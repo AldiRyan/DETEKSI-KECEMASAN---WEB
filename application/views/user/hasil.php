@@ -15,44 +15,36 @@
             <div class="col-md-6">
                 <div class="card mt-4 ml-2 mr-4 mb-4">
                     <div class="card-header">
-                        <h4 class="m-0 font-weight-bold text-primary">Hasil Data Eye Tracking</h4>
+                        <h4 class="m-0 font-weight-bold text-primary">Nilai Kecemasan Berdasarkan Eye Tracking</h4>
                     </div>
                     <div class="card-body ">
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th scope="col" colspan="3">Nilai Data Range Pada Layar</th>
+                                    <th scope="col" colspan="3">Nilai Rata Data Range Pada Layar</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>A1 = <?= $data_a1 ?></td>
-                                    <td>B1 = <?= $data_b1 ?></td>
-                                    <td>C1 = <?= $data_c1 ?> </td>
-                                    <td>D1 = <?= $data_d1 ?> </td>
+                                    <td>Kiri :</td>
+                                    <td><?= $rata_nilai_kiri; ?></td>
                                 </tr>
                                 <tr>
-                                    <td>A2 = <?= $data_a2 ?> </td>
-                                    <td>B2 = <?= $data_b2 ?> </td>
-                                    <td>C2 = <?= $data_c2 ?> </td>
-                                    <td>D2 = <?= $data_d2 ?> </td>
+                                    <td>Tengah :</td>
+                                    <td><?= $rata_nilai_tengah; ?></td>
                                 </tr>
                                 <tr>
-                                    <td>A3 = <?= $data_a3 ?> </td>
-                                    <td>B3 = <?= $data_b3 ?> </td>
-                                    <td>C3 = <?= $data_c3 ?> </td>
-                                    <td>D3 = <?= $data_d3 ?> </td>
+                                    <td>Kanan :</td>
+                                    <td><?= $rata_nilai_kanan; ?></td>
                                 </tr>
                                 <tr>
-                                    <td>A4 = <?= $data_a4 ?> </td>
-                                    <td>B4 = <?= $data_b4 ?> </td>
-                                    <td>C4 = <?= $data_c4 ?> </td>
-                                    <td>D4 = <?= $data_d4 ?> </td>
+                                    <td>Blindspot :</td>
+                                    <td><?= $rata_nilai_blindspot; ?></td>
                                 </tr>
                             </tbody>
                         </table>
                         <hr>
-                        <h4>Total Data <?= $data_total ?></h4>
+                        <h4> Hasil Penilaian <?= round($hasil_fuzzy, 2); ?> </h4>
                     </div>
                 </div>
             </div>

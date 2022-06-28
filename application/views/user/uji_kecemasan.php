@@ -18,7 +18,7 @@
                         <h4 class="m-0 font-weight-bold text-primary">Hasil Uji Kecemasan Mahasiswa</h4>
                     </div>
                     <div class="card-body ">
-                        <form action="<?php echo base_url() . 'user/Uji_kecemasan/lihat_hasil'; ?>" method="POST">
+                        <form action="<?php echo base_url() . 'Proses_Fuzzy/fuzzyfikasi'; ?>" method="POST">
                             <div>
                                 <br>
                                 <h6>Catatan: </h6>
