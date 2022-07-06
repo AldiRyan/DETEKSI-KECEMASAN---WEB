@@ -47,9 +47,12 @@ class Proses_Fuzzy extends CI_Controller
         $mhs = $user_data['id_mhs'];
         $nim_mhs = $user_data['nim_mhs'];
 
+        $nilai_palingKiri = $this->M_proses_fuzzy->get_data_palingkiri($mhs);
         $nilai_kiri = $this->M_proses_fuzzy->get_data_kiri($mhs);
         $nilai_tengah = $this->M_proses_fuzzy->get_data_tengah($mhs);
         $nilai_kanan = $this->M_proses_fuzzy->get_data_kanan($mhs);
+        $nilai_palingKanan = $this->M_proses_fuzzy->get_data_palingkanan($mhs);
+
         $nilai_blindspot = $this->M_proses_fuzzy->get_data_blindspot($mhs);
 
         // $nilai_kiri = 250;
@@ -59,6 +62,32 @@ class Proses_Fuzzy extends CI_Controller
 
         $derajat_nilai = 1;
         if ($derajat_nilai == 1) {
+
+            //Derajat Keanggotaan Paling Kiri Himpunan Sedikit
+            if ($nilai_palingKiri >= 0 && $nilai_palingKiri <= 100) {
+                $sedikit_palingkiri = 1;
+            } else if ($nilai_palingKiri > 100 && $nilai_palingKiri <= 400) {
+                $sedikit_palingkiri = (400 - $nilai_palingKiri) / (400 - 100);
+            } else if ($nilai_palingKiri > 400) {
+                $sedikit_palingkiri = 0;
+            } else {
+                $sedikit_palingkiri = 0;
+            }
+            $h_sedikit_palingkiri = round($sedikit_palingkiri, 2);
+
+            //Derajat Keanggotaan Paling Kiri Himpunan Banyak 
+            if ($nilai_palingKiri >= 400) {
+                $banyak_palingkiri = 1;
+            } else if ($nilai_palingKiri > 100 && $nilai_palingKiri <= 400) {
+                $banyak_palingkiri = ($nilai_palingKiri - 100) / (400 - 100);
+            } else if ($nilai_palingKiri < 100) {
+                $banyak_palingkiri = 0;
+            } else {
+                $banyak_palingkiri = 0;
+            }
+            $h_banyak_palingkiri = round($banyak_palingkiri, 2);
+
+            // =================================================================
 
             //Derajat Keanggotaan Kiri Himpunan Sedikit
             if ($nilai_kiri >= 0 && $nilai_kiri <= 100) {
@@ -138,29 +167,29 @@ class Proses_Fuzzy extends CI_Controller
 
             // =================================================================
 
-            //Derajat Keanggotaan Blindspot Himpunan Sedikit 
-            if ($nilai_blindspot >= 0 && $nilai_blindspot <= 100) {
-                $sedikit_blindspot = 1;
-            } else if ($nilai_blindspot > 100 && $nilai_blindspot <= 700) {
-                $sedikit_blindspot = (700 - $nilai_blindspot) / (700 - 100);
-            } else if ($nilai_blindspot > 700) {
-                $sedikit_blindspot = 0;
+            //Derajat Keanggotaan Kanan Himpunan Sedikit
+            if ($nilai_palingKanan >= 0 && $nilai_palingKanan <= 100) {
+                $sedikit_palingkanan = 1;
+            } else if ($nilai_palingKanan > 100 && $nilai_palingKanan <= 400) {
+                $sedikit_palingkanan = (400 - $nilai_palingKanan) / (400 - 100);
+            } else if ($nilai_palingKanan > 400) {
+                $sedikit_palingkanan = 0;
             } else {
-                $sedikit_blindspot = 0;
+                $sedikit_palingkanan = 0;
             }
-            $h_sedikit_blindspot = round($sedikit_blindspot, 2);
+            $h_sedikit_palingkanan = round($sedikit_palingkanan, 2);
 
-            //Derajat Keanggotaan Blindspot Himpunan Banyak
-            if ($nilai_blindspot >= 700) {
-                $banyak_blindspot = 1;
-            } else if ($nilai_blindspot > 100 && $nilai_blindspot <= 700) {
-                $banyak_blindspot = ($nilai_blindspot - 100) / (700 - 100);
-            } else if ($nilai_blindspot < 100) {
-                $banyak_blindspot = 0;
+            //Derajat Keanggotaan Kanan Himpunan Banyak 
+            if ($nilai_palingKanan >= 400) {
+                $banyak_palingkanan = 1;
+            } else if ($nilai_palingKanan > 100 && $nilai_palingKanan <= 400) {
+                $banyak_palingkanan = ($nilai_palingKanan - 100) / (400 - 100);
+            } else if ($nilai_palingKanan < 100) {
+                $banyak_palingkanan = 0;
             } else {
-                $banyak_blindspot = 0;
+                $banyak_palingkanan = 0;
             }
-            $h_banyak_blindspot = round($banyak_blindspot, 2);
+            $h_banyak_palingkanan = round($banyak_palingkanan, 2);
 
             // =================================================================
 
@@ -170,38 +199,72 @@ class Proses_Fuzzy extends CI_Controller
         # Pembentukan Rule
         // ===================================================
 
-        // IF Kiri Sedikit AND Tengah Sedikit AND Kanan Sedikit AND Blindspot Sedikit THEN Tidak Cemas = 0 
-        $r1 = min($h_sedikit_kiri, $h_sedikit_tengah, $h_sedikit_kanan, $h_sedikit_blindspot);
-        // IF Kiri Sedikit AND Tengah Sedikit AND Kanan Sedikit AND Blindspot banyak THEN Kecemasan Berat Sekali = 0.8 
-        $r2 = min($h_sedikit_kiri, $h_sedikit_tengah, $h_sedikit_kanan, $h_banyak_blindspot);
-        // IF Kiri Sedikit AND Tengah Sedikit AND Kanan Banyak AND Blindspot Sedikit THEN Kecemasan Ringan = 0.2
-        $r3 = min($h_sedikit_kiri, $h_sedikit_tengah, $h_banyak_kanan, $h_sedikit_blindspot);
-        // IF Kiri Sedikit AND Tengah Sedikit AND Kanan Banyak AND Blindspot Banyak THEN Kecemasan Berat Sekali = 0.8
-        $r4 = min($h_sedikit_kiri, $h_sedikit_tengah, $h_banyak_kanan, $h_banyak_blindspot);
-        // IF Kiri Sedikit AND Tengah Banyak AND Kanan Sedikit AND Blindspot Sedikit THEN Tidak Cemas = 0 
-        $r5 = min($h_sedikit_kiri, $h_banyak_tengah, $h_sedikit_kanan, $h_sedikit_blindspot);
-        // IF Kiri Sedikit AND Tengah Banyak AND Kanan Sedikit AND Blindspot Banyak THEN Kecemasan Berat  = 0.6
-        $r6 = min($h_sedikit_kiri, $h_banyak_tengah, $h_sedikit_kanan, $h_banyak_blindspot);
-        // IF Kiri Sedikit AND Tengah Banyak AND Kanan Banyak AND Blindspot Sedikit THEN Kecemasan Sedang  = 0.4
-        $r7 = min($h_sedikit_kiri, $h_banyak_tengah, $h_banyak_kanan, $h_sedikit_blindspot);
-        // IF Kiri Sedikit AND Tengah Banyak AND Kanan Banyak AND Blindspot Banyak THEN Kecemasan Berat Sekali  = 0.8
-        $r8 = min($h_sedikit_kiri, $h_banyak_tengah, $h_banyak_kanan, $h_banyak_blindspot);
-        // IF Kiri Banyak AND Tengah Sedikit AND Kanan Sedikit AND Blindspot Sedikit THEN Kecemasan Ringan  = 0.2
-        $r9 = min($h_banyak_kiri, $h_sedikit_tengah, $h_sedikit_kanan, $h_sedikit_blindspot);
-        // IF Kiri Banyak AND Tengah Sedikit AND Kanan Sedikit AND Blindspot Banyak THEN Kecemasan Berat Sekali  = 0.8
-        $r10 = min($h_banyak_kiri, $h_sedikit_tengah, $h_sedikit_kanan, $h_banyak_blindspot);
-        // IF Kiri Banyak AND Tengah Sedikit AND Kanan Banyak AND Blindspot Sedikit THEN Kecemasan Berat  = 0.6
-        $r11 = min($h_banyak_kiri, $h_sedikit_tengah, $h_banyak_kanan, $h_sedikit_blindspot);
-        // IF Kiri Banyak AND Tengah Sedikit AND Kanan Banyak AND Blindspot Banyak THEN Kecemasan Berat Sekali  = 0.8
-        $r12 = min($h_banyak_kiri, $h_sedikit_tengah, $h_banyak_kanan, $h_banyak_blindspot);
-        // IF Kiri Banyak AND Tengah Banyak AND Kanan Sedikit AND Blindspot Sedikit THEN Kecemasan Sedang  = 0.4
-        $r13 = min($h_banyak_kiri, $h_banyak_tengah, $h_sedikit_kanan, $h_sedikit_blindspot);
-        // IF Kiri Banyak AND Tengah Banyak AND Kanan Sedikit AND Blindspot Banyak THEN Kecemasan Berat Sekali  = 0.8
-        $r14 = min($h_banyak_kiri, $h_banyak_tengah, $h_sedikit_kanan, $h_banyak_blindspot);
-        // IF Kiri Banyak AND Tengah Banyak AND Kanan Banyak AND Blindspot Sedikit THEN Kecemasan Berat  = 0.6 
-        $r15 = min($h_banyak_kiri, $h_banyak_tengah, $h_banyak_kanan, $h_sedikit_blindspot);
-        // IF Kiri Banyak AND Tengah Banyak AND Kanan Banyak AND Blindspot Banyak THEN Tidak Cemas  = 0 
-        $r16 = min($h_banyak_kiri, $h_banyak_tengah, $h_banyak_kanan, $h_banyak_blindspot);
+        // IF Paling Kiri Sedikit AND Kiri Sedikit AND Tengah Sedikit AND Kanan Sedikit AND Paling Kanan Sedikit THEN Tidak Cemas = 0 
+        $r1 = min($h_sedikit_palingkiri, $h_sedikit_kiri, $h_sedikit_tengah, $h_sedikit_kanan, $h_sedikit_palingkanan);
+        // IF Paling Kiri Sedikit AND Kiri Sedikit AND Tengah Sedikit AND Kanan Sedikit AND Paling Kanan Banyak THEN Tidak Cemas = 0 
+        $r2 = min($h_sedikit_palingkiri, $h_sedikit_kiri, $h_sedikit_tengah, $h_sedikit_kanan, $h_banyak_palingkanan);
+        // IF Paling Kiri Sedikit AND Kiri Sedikit AND Tengah Sedikit AND Kanan Banyak AND Paling Kanan Sedikit THEN Tidak Cemas = 0 
+        $r3 = min($h_sedikit_palingkiri, $h_sedikit_kiri, $h_sedikit_tengah, $h_banyak_kanan, $h_sedikit_palingkanan);
+        // IF Paling Kiri Sedikit AND Kiri Sedikit AND Tengah Sedikit AND Kanan Banyak AND Paling Kanan Banyak THEN Tidak Cemas = 0 
+        $r4 = min($h_sedikit_palingkiri, $h_sedikit_kiri, $h_sedikit_tengah, $h_banyak_kanan, $h_banyak_palingkanan);
+        // IF Paling Kiri Sedikit AND Kiri Sedikit AND Tengah Banyak AND Kanan Sedikit AND Paling Kanan Sedikit THEN Tidak Cemas = 0 
+        $r5 = min($h_sedikit_palingkiri, $h_sedikit_kiri, $h_banyak_tengah, $h_sedikit_kanan, $h_sedikit_palingkanan);
+        // IF Paling Kiri Sedikit AND Kiri Sedikit AND Tengah Banyak AND Kanan Sedikit AND Paling Kanan Banyak THEN Tidak Cemas = 0 
+        $r6 = min($h_sedikit_palingkiri, $h_sedikit_kiri, $h_banyak_tengah, $h_sedikit_kanan, $h_banyak_palingkanan);
+        // IF Paling Kiri Sedikit AND Kiri Sedikit AND Tengah Banyak AND Kanan Banyak AND Paling Kanan Sedikit THEN Tidak Cemas = 0 
+        $r7 = min($h_sedikit_palingkiri, $h_sedikit_kiri, $h_banyak_tengah, $h_banyak_kanan, $h_sedikit_palingkanan);
+        // IF Paling Kiri Sedikit AND Kiri Sedikit AND Tengah Banyak AND Kanan Banyak AND Paling Kanan Banyak THEN Tidak Cemas = 0 
+        $r8 = min($h_sedikit_palingkiri, $h_sedikit_kiri, $h_banyak_tengah, $h_banyak_kanan, $h_banyak_palingkanan);
+        // IF Paling Kiri Sedikit AND Kiri Banyak AND Tengah Sedikit AND Kanan Sedikit AND Paling Kanan Sedikit THEN Tidak Cemas = 0 
+        $r9 = min($h_sedikit_palingkiri, $h_banyak_kiri, $h_sedikit_tengah, $h_sedikit_kanan, $h_sedikit_palingkanan);
+        // IF Paling Kiri Sedikit AND Kiri Banyak AND Tengah Sedikit AND Kanan Sedikit AND Paling Kanan Banyak THEN Tidak Cemas = 0 
+        $r10 = min($h_sedikit_palingkiri, $h_banyak_kiri, $h_sedikit_tengah, $h_sedikit_kanan, $h_sedikit_palingkanan);
+        // IF Paling Kiri Sedikit AND Kiri Banyak AND Tengah Sedikit AND Kanan Banyak AND Paling Kanan Sedikit THEN Tidak Cemas = 0 
+        $r11 = min($h_sedikit_palingkiri, $h_banyak_kiri, $h_sedikit_tengah, $h_banyak_kanan, $h_sedikit_palingkanan);
+        // IF Paling Kiri Sedikit AND Kiri Banyak AND Tengah Sedikit AND Kanan Banyak AND Paling Kanan Banyak THEN Tidak Cemas = 0 
+        $r12 = min($h_sedikit_palingkiri, $h_banyak_kiri, $h_sedikit_tengah, $h_banyak_kanan, $h_banyak_palingkanan);
+        // IF Paling Kiri Sedikit AND Kiri Banyak AND Tengah Banyak AND Kanan Sedikit AND Paling Kanan Sedikit THEN Tidak Cemas = 0 
+        $r13 = min($h_sedikit_palingkiri, $h_banyak_kiri, $h_banyak_tengah, $h_sedikit_kanan, $h_sedikit_palingkanan);
+        // IF Paling Kiri Sedikit AND Kiri Banyak AND Tengah Banyak AND Kanan Sedikit AND Paling Kanan Banyak THEN Tidak Cemas = 0 
+        $r14 = min($h_sedikit_palingkiri, $h_banyak_kiri, $h_banyak_tengah, $h_sedikit_kanan, $h_banyak_palingkanan);
+        // IF Paling Kiri Sedikit AND Kiri Banyak AND Tengah Banyak AND Kanan Banyak AND Paling Kanan Sedikit THEN Tidak Cemas = 0 
+        $r15 = min($h_sedikit_palingkiri, $h_banyak_kiri, $h_banyak_tengah, $h_banyak_kanan, $h_sedikit_palingkanan);
+        // IF Paling Kiri Sedikit AND Kiri Banyak AND Tengah Banyak AND Kanan Banyak AND Paling Kanan Banyak THEN Tidak Cemas = 0 
+        $r16 = min($h_sedikit_palingkiri, $h_banyak_kiri, $h_banyak_tengah, $h_banyak_kanan, $h_banyak_palingkanan);
+
+        // IF Paling Kiri Banyak AND Kiri Sedikit AND Tengah Sedikit AND Kanan Sedikit AND Paling Kanan Sedikit THEN Tidak Cemas = 0 
+        $r17 = min($h_banyak_palingkiri, $h_sedikit_kiri, $h_sedikit_tengah, $h_sedikit_kanan, $h_sedikit_palingkanan);
+        // IF Paling Kiri Banyak AND Kiri Sedikit AND Tengah Sedikit AND Kanan Sedikit AND Paling Kanan Banyak THEN Tidak Cemas = 0 
+        $r18 = min($h_banyak_palingkiri, $h_sedikit_kiri, $h_sedikit_tengah, $h_sedikit_kanan, $h_banyak_palingkanan);
+        // IF Paling Kiri Banyak AND Kiri Sedikit AND Tengah Sedikit AND Kanan Banyak AND Paling Kanan Sedikit THEN Tidak Cemas = 0 
+        $r19 = min($h_banyak_palingkiri, $h_sedikit_kiri, $h_sedikit_tengah, $h_banyak_kanan, $h_sedikit_palingkanan);
+        // IF Paling Kiri Banyak AND Kiri Sedikit AND Tengah Sedikit AND Kanan Banyak AND Paling Kanan Banyak THEN Tidak Cemas = 0 
+        $r20 = min($h_banyak_palingkiri, $h_sedikit_kiri, $h_sedikit_tengah, $h_banyak_kanan, $h_banyak_palingkanan);
+        // IF Paling Kiri Banyak AND Kiri Sedikit AND Tengah Banyak AND Kanan Sedikit AND Paling Kanan Sedikit THEN Tidak Cemas = 0 
+        $r21 = min($h_banyak_palingkiri, $h_sedikit_kiri, $h_banyak_tengah, $h_sedikit_kanan, $h_sedikit_palingkanan);
+        // IF Paling Kiri Banyak AND Kiri Sedikit AND Tengah Banyak AND Kanan Sedikit AND Paling Kanan Banyak THEN Tidak Cemas = 0 
+        $r22 = min($h_banyak_palingkiri, $h_sedikit_kiri, $h_banyak_tengah, $h_sedikit_kanan, $h_banyak_palingkanan);
+        // IF Paling Kiri Banyak AND Kiri Sedikit AND Tengah Banyak AND Kanan Banyak AND Paling Kanan Sedikit THEN Tidak Cemas = 0 
+        $r23 = min($h_banyak_palingkiri, $h_sedikit_kiri, $h_banyak_tengah, $h_banyak_kanan, $h_sedikit_palingkanan);
+        // IF Paling Kiri Banyak AND Kiri Sedikit AND Tengah Banyak AND Kanan Sedikit AND Paling Kanan Sedikit THEN Tidak Cemas = 0 
+        $r24 = min($h_banyak_palingkiri, $h_sedikit_kiri, $h_banyak_tengah, $h_sedikit_kanan, $h_sedikit_palingkanan);
+        // IF Paling Kiri Banyak AND Kiri Sedikit AND Tengah Banyak AND Kanan Banyak AND Paling Kanan Banyak THEN Tidak Cemas = 0 
+        $r25 = min($h_banyak_palingkiri, $h_sedikit_kiri, $h_banyak_tengah, $h_banyak_kanan, $h_banyak_palingkanan);
+        // IF Paling Kiri Banyak AND Kiri Banyak AND Tengah Sedikit AND Kanan Sedikit AND Paling Kanan Sedikit THEN Tidak Cemas = 0 
+        $r26 = min($h_banyak_palingkiri, $h_banyak_kiri, $h_sedikit_tengah, $h_sedikit_kanan, $h_sedikit_palingkanan);
+        // IF Paling Kiri Banyak AND Kiri Banyak AND Tengah Sedikit AND Kanan Sedikit AND Paling Kanan Banyak THEN Tidak Cemas = 0 
+        $r27 = min($h_banyak_palingkiri, $h_banyak_kiri, $h_sedikit_tengah, $h_sedikit_kanan, $h_banyak_palingkanan);
+        // IF Paling Kiri Banyak AND Kiri Banyak AND Tengah Sedikit AND Kanan Banyak AND Paling Kanan Sedikit THEN Tidak Cemas = 0 
+        $r28 = min($h_banyak_palingkiri, $h_banyak_kiri, $h_sedikit_tengah, $h_banyak_kanan, $h_sedikit_palingkanan);
+        // IF Paling Kiri Banyak AND Kiri Banyak AND Tengah Sedikit AND Kanan Banyak AND Paling Kanan Banyak THEN Tidak Cemas = 0 
+        $r29 = min($h_banyak_palingkiri, $h_banyak_kiri, $h_sedikit_tengah, $h_banyak_kanan, $h_banyak_palingkanan);
+        // IF Paling Kiri Banyak AND Kiri Banyak AND Tengah Banyak AND Kanan Sedikit AND Paling Kanan Banyak THEN Tidak Cemas = 0 
+        $r30 = min($h_banyak_palingkiri, $h_banyak_kiri, $h_banyak_tengah, $h_sedikit_kanan, $h_banyak_palingkanan);
+        // IF Paling Kiri Banyak AND Kiri Banyak AND Tengah Banyak AND Kanan Banyak AND Paling Kanan Banyak THEN Tidak Cemas = 0 
+        $r31 = min($h_banyak_palingkiri, $h_banyak_kiri, $h_banyak_tengah, $h_banyak_kanan, $h_banyak_palingkanan);
+        // IF Paling Kiri Banyak AND Kiri Banyak AND Tengah Banyak AND Kanan Banyak AND Paling Kanan Banyak THEN Tidak Cemas = 0 
+        $r32 = min($h_banyak_palingkiri, $h_banyak_kiri, $h_banyak_tengah, $h_banyak_kanan, $h_banyak_palingkanan);
+
 
         // =============================================================
         # Deffuzyfikasi Sugeno Weight Average

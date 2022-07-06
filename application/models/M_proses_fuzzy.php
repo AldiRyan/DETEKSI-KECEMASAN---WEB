@@ -2,27 +2,33 @@
 
 class M_proses_fuzzy extends CI_Model
 {
+    public function get_data_palingkiri($mhs) // menghitung jumlah data titik paling kiri
+    {
+        $hasil = $this->db->query("SELECT * FROM tbl_hasil WHERE id_mhs=" . $mhs . " and titik_x > 0 and titik_x < 384");
+        return $hasil->num_rows();
+    }
+
     public function get_data_kiri($mhs) // menghitung jumlah data titik kiri
     {
-        $hasil = $this->db->query("SELECT * FROM tbl_hasil WHERE id_mhs=" . $mhs . " and titik_x > 0 and titik_x < 240");
+        $hasil = $this->db->query("SELECT * FROM tbl_hasil WHERE id_mhs=" . $mhs . " and titik_x > 385 and titik_x < 768");
         return $hasil->num_rows();
     }
 
     public function get_data_tengah($mhs) // menghitung jumlah data titik tengah
     {
-        $hasil = $this->db->query("SELECT * FROM tbl_hasil WHERE id_mhs=" . $mhs . " and titik_x > 241 and titik_x < 1680");
+        $hasil = $this->db->query("SELECT * FROM tbl_hasil WHERE id_mhs=" . $mhs . " and titik_x > 769 and titik_x < 1152");
         return $hasil->num_rows();
     }
 
     public function get_data_kanan($mhs) // menghitung jumlah data titik kanan
     {
-        $hasil = $this->db->query("SELECT * FROM tbl_hasil WHERE id_mhs=" . $mhs . " and titik_x > 1681 and titik_x < 1920");
+        $hasil = $this->db->query("SELECT * FROM tbl_hasil WHERE id_mhs=" . $mhs . " and titik_x > 1153 and titik_x < 1536");
         return $hasil->num_rows();
     }
 
-    public function get_data_blindspot($mhs) // menghitung jumlah data titik blindspot
+    public function get_data_palingkanan($mhs) // menghitung jumlah data titik paling kanan
     {
-        $hasil = $this->db->query("SELECT * FROM tbl_hasil WHERE id_mhs=" . $mhs . " and titik_x = 'NaN'");
+        $hasil = $this->db->query("SELECT * FROM tbl_hasil WHERE id_mhs=" . $mhs . " and titik_x > 1537 and titik_x < 1920");
         return $hasil->num_rows();
     }
 
