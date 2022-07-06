@@ -7,11 +7,11 @@ class M_dashboard extends CI_Model{
         return $this->db->get()->num_rows();
     }
 
-    public function get_konsultasi() {
-        $this->db->select('*');
-        $this->db->from('tbl_uji');
-        return $this->db->get()->num_rows();
-    }
+    // public function get_konsultasi() {
+    //     $this->db->select('*');
+    //     $this->db->from('tbl_uji');
+    //     return $this->db->get()->num_rows();
+    // }
 
     public function get_mhs() {
         $this->db->select('*');

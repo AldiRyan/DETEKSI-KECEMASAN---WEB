@@ -13,7 +13,7 @@ class Dashboard extends CI_Controller
     {
         $data['title'] = 'Dashboard';
         $data['jadwal'] = $this->M_dashboard->get_jadwal();
-        $data['konsultasi'] = $this->M_dashboard->get_konsultasi();
+        // $data['konsultasi'] = $this->M_dashboard->get_konsultasi();
         $data['registrasi'] = $this->M_dashboard->get_mhs();
         $data['admin'] = $this->M_dashboard->jumlah_admin();
         $this->load->view('dashboard', $data);
