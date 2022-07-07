@@ -26,6 +26,10 @@
                             </thead>
                             <tbody>
                                 <tr>
+                                    <td>Paling Kiri :</td>
+                                    <td><?= $rata_nilai_palingkiri; ?></td>
+                                </tr>
+                                <tr>
                                     <td>Kiri :</td>
                                     <td><?= $rata_nilai_kiri; ?></td>
                                 </tr>
@@ -38,8 +42,8 @@
                                     <td><?= $rata_nilai_kanan; ?></td>
                                 </tr>
                                 <tr>
-                                    <td>Blindspot :</td>
-                                    <td><?= $rata_nilai_blindspot; ?></td>
+                                    <td>Paling Kanan :</td>
+                                    <td><?= $rata_nilai_palingkanan; ?></td>
                                 </tr>
                             </tbody>
                         </table>

@@ -39,16 +39,16 @@ class M_proses_fuzzy extends CI_Model
             'id_nilai_derajat' => $this->autonumber_nilai_derajat(),
             'nim_mhs' => $data['nim_mhs'],
 
+            'palingkiri_sedikit' => $data['palingkiri_sedikit'],
+            'palingkiri_banyak' => $data['palingkiri_banyak'],
             'kiri_sedikit' => $data['kiri_sedikit'],
             'kiri_banyak' => $data['kiri_banyak'],
             'tengah_sedikit' => $data['tengah_sedikit'],
             'tengah_banyak' => $data['tengah_banyak'],
             'kanan_sedikit' => $data['kanan_sedikit'],
-
             'kanan_banyak' => $data['kanan_banyak'],
-            'blindspot_sedikit' => $data['blindspot_sedikit'],
-            'blindspot_banyak' => $data['blindspot_banyak'],
-
+            'palingkanan_sedikit' => $data['palingkanan_sedikit'],
+            'palingkanan_banyak' => $data['palingkanan_banyak'],
         ];
 
         $this->db->insert('tbl_nilai_derajat', $data);
@@ -61,7 +61,9 @@ class M_proses_fuzzy extends CI_Model
             'rule_1' => $data2['r1'], 'rule_2' => $data2['r2'], 'rule_3' => $data2['r3'], 'rule_4' => $data2['r4'], 'rule_5' => $data2['r5'],
             'rule_6' => $data2['r6'], 'rule_7' => $data2['r7'], 'rule_8' => $data2['r8'], 'rule_9' => $data2['r9'], 'rule_10' => $data2['r10'],
             'rule_11' => $data2['r11'], 'rule_12' => $data2['r12'], 'rule_13' => $data2['r13'], 'rule_14' => $data2['r14'], 'rule_15' => $data2['r15'],
-            'rule_16' => $data2['r16']
+            'rule_16' => $data2['r16'], 'rule_17' => $data2['r17'], 'rule_18' => $data2['r18'], 'rule_19' => $data2['r19'], 'rule_20' => $data2['r20'],
+            'rule_21' => $data2['r21'], 'rule_22' => $data2['r22'], 'rule_23' => $data2['r23'], 'rule_24' => $data2['r24'], 'rule_25' => $data2['r25'], 'rule_26' => $data2['r26'], 'rule_27' => $data2['r27'], 'rule_28' => $data2['r28'], 'rule_29' => $data2['r29'], 'rule_30' => $data2['r30'],
+            'rule_31' => $data2['r31'], 'rule_32' => $data2['r32']
         ];
 
         $this->db->insert('tbl_nilai_rule', $data);
@@ -71,10 +73,11 @@ class M_proses_fuzzy extends CI_Model
     {
         $data = [
             'id_nilai_derajat'      => $this->autonumber_nilai_derajat(),
+            'rata_nilai_palingkiri' => $data3['rata_nilai_palingkiri'],
             'rata_nilai_kiri'       => $data3['rata_nilai_kiri'],
             'rata_nilai_tengah'     => $data3['rata_nilai_tengah'],
             'rata_nilai_kanan'      => $data3['rata_nilai_kanan'],
-            'rata_nilai_blindspot'  => $data3['rata_nilai_blindspot'],
+            'rata_nilai_palingkanan' => $data3['rata_nilai_palingkanan'],
             'hasil_fuzzy'           => $data3['hasil_fuzzy'],
         ];
 

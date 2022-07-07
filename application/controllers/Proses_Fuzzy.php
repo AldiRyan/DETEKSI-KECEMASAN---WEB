@@ -53,7 +53,7 @@ class Proses_Fuzzy extends CI_Controller
         $nilai_kanan = $this->M_proses_fuzzy->get_data_kanan($mhs);
         $nilai_palingKanan = $this->M_proses_fuzzy->get_data_palingkanan($mhs);
 
-        $nilai_blindspot = $this->M_proses_fuzzy->get_data_blindspot($mhs);
+        //$nilai_blindspot = $this->M_proses_fuzzy->get_data_blindspot($mhs);
 
         // $nilai_kiri = 250;
         // $nilai_tengah = 150;
@@ -167,7 +167,7 @@ class Proses_Fuzzy extends CI_Controller
 
             // =================================================================
 
-            //Derajat Keanggotaan Kanan Himpunan Sedikit
+            //Derajat Keanggotaan Paling Kanan Himpunan Sedikit
             if ($nilai_palingKanan >= 0 && $nilai_palingKanan <= 100) {
                 $sedikit_palingkanan = 1;
             } else if ($nilai_palingKanan > 100 && $nilai_palingKanan <= 400) {
@@ -179,7 +179,7 @@ class Proses_Fuzzy extends CI_Controller
             }
             $h_sedikit_palingkanan = round($sedikit_palingkanan, 2);
 
-            //Derajat Keanggotaan Kanan Himpunan Banyak 
+            //Derajat Keanggotaan Paling Kanan Himpunan Banyak 
             if ($nilai_palingKanan >= 400) {
                 $banyak_palingkanan = 1;
             } else if ($nilai_palingKanan > 100 && $nilai_palingKanan <= 400) {
@@ -265,41 +265,46 @@ class Proses_Fuzzy extends CI_Controller
         // IF Paling Kiri Banyak AND Kiri Banyak AND Tengah Banyak AND Kanan Banyak AND Paling Kanan Banyak THEN Tidak Cemas = 0 
         $r32 = min($h_banyak_palingkiri, $h_banyak_kiri, $h_banyak_tengah, $h_banyak_kanan, $h_banyak_palingkanan);
 
-
         // =============================================================
         # Deffuzyfikasi Sugeno Weight Average
         // =============================================================
 
 
-        $wa = (($r1 * 10) + ($r2 * 100) + ($r3 * 25) + ($r4 * 100) + ($r5 * 10) + ($r6 * 75) + ($r7 * 50) + ($r8 * 100) + ($r9 * 25) + ($r10 * 100) +
-            ($r11 * 75) + ($r12 * 100) + ($r13 * 50) + ($r14 * 100) + ($r15 * 75) + ($r16 * 10)) / ($r1 + $r2 + $r3 + $r4 + $r5 + $r6 + $r7 + $r8 + $r9 + $r10 +
-            $r11 + $r12 + $r13 + $r14 + $r15 + $r16);
+        $wa = (($r1 * 10) + ($r2 * 10) + ($r3 * 10) + ($r4 * 25) + ($r5 * 10) + ($r6 * 25) + ($r7 * 25) + ($r8 * 75) + ($r9 * 10) + ($r10 * 25) +
+            ($r11 * 25) + ($r12 * 50) + ($r13 * 25) + ($r14 * 75) + ($r15 * 50) + ($r16 * 75) + ($r17 * 10) + ($r18 * 25) + ($r19 * 10) + ($r20 * 75) +
+            ($r21 * 25) + ($r22 * 100) + ($r23 * 50) + ($r24 * 75) + ($r25 * 25) + ($r26 * 75) + ($r27 * 50) + ($r28 * 100) + ($r29 * 50) + ($r30 * 100) +
+            ($r31 * 75) + ($r32 * 10)) / ($r1 + $r2 + $r3 + $r4 + $r5 + $r6 + $r7 + $r8 + $r9 + $r10 + $r11 + $r12 + $r13 + $r14 + $r15 + $r16 +
+            $r17 + $r18 + $r19 + $r20 + $r21 + $r22 + $r23 + $r24 + $r25 + $r26 + $r27 + $r28 + $r29 + $r30 + $r31 + $r32);
 
         $data = [
             'nim_mhs' => $nim_mhs,
-            'kiri_sedikit' => $h_sedikit_kiri, 'kiri_banyak' => $h_banyak_kiri, 'tengah_sedikit' => $h_sedikit_tengah, 'tengah_banyak' => $h_banyak_tengah, 'kanan_sedikit' => $h_sedikit_kanan,
-            'kanan_banyak' => $h_banyak_kanan, 'blindspot_sedikit' => $h_sedikit_blindspot, 'blindspot_banyak' => $h_banyak_blindspot,
+            'palingkiri_sedikit' => $h_sedikit_palingkiri, 'palingkiri_banyak' => $h_banyak_palingkiri, 'kiri_sedikit' => $h_sedikit_kiri, 'kiri_banyak' => $h_banyak_kiri, 'tengah_sedikit' => $h_sedikit_tengah, 'tengah_banyak' => $h_banyak_tengah, 'kanan_sedikit' => $h_sedikit_kanan,
+            'kanan_banyak' => $h_banyak_kanan, 'palingkanan_sedikit' => $h_sedikit_palingkanan, 'palingkanan_banyak' => $h_banyak_palingkanan,
         ];
 
         $data2 = [
             'r1' => $r1, 'r2' => $r2, 'r3' => $r3, 'r4' => $r4, 'r5' => $r5, 'r6' => $r6, 'r7' => $r7, 'r8' => $r8, 'r9' => $r9, 'r10' => $r10,
-            'r11' => $r11, 'r12' => $r12, 'r13' => $r13, 'r14' => $r14, 'r15' => $r15, 'r16' => $r16
+            'r11' => $r11, 'r12' => $r12, 'r13' => $r13, 'r14' => $r14, 'r15' => $r15, 'r16' => $r16, 'r17' => $r17, 'r18' => $r18, 'r19' => $r19, 'r20' => $r20,
+            'r21' => $r21, 'r22' => $r22, 'r23' => $r23, 'r24' => $r24, 'r25' => $r25, 'r26' => $r26, 'r27' => $r27, 'r28' => $r28, 'r29' => $r29, 'r30' => $r30,
+            'r31' => $r31, 'r32' => $r32
         ];
 
         $data3 = [
+            'rata_nilai_palingkiri' => $nilai_palingKiri,
             'rata_nilai_kiri' => $nilai_kiri,
             'rata_nilai_tengah' => $nilai_tengah,
             'rata_nilai_kanan' => $nilai_kanan,
-            'rata_nilai_blindspot' => $nilai_blindspot,
+            'rata_nilai_palingkanan' => $nilai_palingKanan,
             'hasil_fuzzy' => $wa
         ];
 
         //$data_kirim['nilai_skor'] =  $this->M_hasil_kecemasan->nilai_skor($mhs);
         $data_kirim = [
+            'rata_nilai_palingkiri' => $nilai_palingKiri,
             'rata_nilai_kiri' => $nilai_kiri,
             'rata_nilai_tengah' => $nilai_tengah,
             'rata_nilai_kanan' => $nilai_kanan,
-            'rata_nilai_blindspot' => $nilai_blindspot,
+            'rata_nilai_palingkanan' => $nilai_palingKanan,
             'hasil_fuzzy' => $wa,
             'nilai_skor' => $this->M_hasil_kecemasan->nilai_skor($mhs),
 
