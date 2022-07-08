@@ -24,31 +24,45 @@
                                     <th scope="col" colspan="3">Nilai Rata Data Range Pada Layar</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Paling Kiri :</td>
-                                    <td><?= $rata_nilai_palingkiri; ?></td>
-                                </tr>
-                                <tr>
-                                    <td>Kiri :</td>
-                                    <td><?= $rata_nilai_kiri; ?></td>
-                                </tr>
-                                <tr>
-                                    <td>Tengah :</td>
-                                    <td><?= $rata_nilai_tengah; ?></td>
-                                </tr>
-                                <tr>
-                                    <td>Kanan :</td>
-                                    <td><?= $rata_nilai_kanan; ?></td>
-                                </tr>
-                                <tr>
-                                    <td>Paling Kanan :</td>
-                                    <td><?= $rata_nilai_palingkanan; ?></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <hr>
-                        <h4> Hasil Penilaian <?= round($hasil_fuzzy, 2); ?> </h4>
+
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" colspan="3">Keterangan Skor :</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <ul>15 – 30 = kecemasan rendah</ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <ul>30 – 45 = kecemasan sedang</ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <ul>45 – 60 = kecemasan tinggi</ul>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <hr>
+                            <h4> Hasil Penilaian <?= round($hasil_fuzzy, 2); ?>% </h4>
+                            <br>
+                            <p>Anda Sedang Mengalami: </p>
+                            <?php
+                            $total = round($hasil_fuzzy, 2);
+                            if ($total > 15 or $total <= 30) { ?>
+                                <span class="badge badge-success">Kecemasan Rendah</span>
+                            <?php } elseif ($total > 30 or $total <= 45) { ?>
+                                <span class="badge badge-info">Kecemasan Sedang</span>
+                            <?php } elseif ($total > 45 or $total <= 60) { ?>
+                                <span class="badge badge-primary">Kecemasan Tinggi</span>
+                            <?php } ?>
                     </div>
                 </div>
             </div>
